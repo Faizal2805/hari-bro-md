@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 export default function Header() {
@@ -13,71 +12,63 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Helper for smooth scroll
+  const scrollToSection = (id) => {
+    // Normalize id for sections like recentworks and testimonials
+    let el = document.getElementById(id);
+    if (!el) {
+      // Try with hyphenated id (recent-works, testimonials-section)
+      el = document.getElementById(id.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase());
+    }
+    if (!el) {
+      // Try with plural/singular
+      if (id === 'recentworks') el = document.getElementById('recent-works');
+      if (id === 'testimonials') el = document.getElementById('testimonials-section');
+    }
+    if (!el) {
+      el = document.querySelector(`[data-section="${id}"]`);
+    }
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setIsMenuOpen(false);
+    }
+  };
+
   return (
     <header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b ${isScrolled ? 'bg-white/80 backdrop-blur-lg shadow-sm border-gray-100' : 'bg-transparent border-transparent'}`}
       style={{ WebkitBackdropFilter: isScrolled ? 'blur(12px)' : undefined, backdropFilter: isScrolled ? 'blur(12px)' : undefined }}
     >
-      <nav className="px-6 py-4">
+      <nav className="px-4 sm:px-6 py-4">
         <div className="flex items-center justify-between">
-          <Link to="/" className="text-2xl font-pacifico text-blue-600">
+          <span className="text-2xl font-pacifico text-blue-600 cursor-pointer" onClick={() => scrollToSection('home')}>
             logo
-          </Link>
-          <div className="hidden md:flex items-center space-x-8">
-            <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">
-              Home
-            </Link>
-            <Link to="/about" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">
-              About
-            </Link>
-            <Link to="/services" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">
-              Services
-            </Link>
-            <Link to="/solutions" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">
-              Solutions
-            </Link>
-            <Link to="/team" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">
-              Team
-            </Link>
-            <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">
-              Contact
-            </Link>
-            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap">
-              Get Started
-            </button>
+          </span>
+          <div className="hidden md:flex items-center space-x-6">
+            <span onClick={() => scrollToSection('home')} className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">Home</span>
+            <span onClick={() => scrollToSection('services')} className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">Services</span>
+            <span onClick={() => scrollToSection('recentworks')} className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">Recent Works</span>
+            <span onClick={() => scrollToSection('testimonials')} className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">Testimonials</span>
+            <span onClick={() => scrollToSection('contact')} className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer whitespace-nowrap">Contact</span>
+            <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap" onClick={() => scrollToSection('contact')}>Get Started</button>
           </div>
           <button 
-            className="md:hidden w-6 h-6 flex items-center justify-center cursor-pointer"
+            className="md:hidden w-8 h-8 flex items-center justify-center cursor-pointer"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Open menu"
           >
-            <i className="ri-menu-line text-xl"></i>
+            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600"><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="18" x2="21" y2="18" /></svg>
           </button>
         </div>
         {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t border-gray-100 pt-4">
-            <div className="flex flex-col space-y-4">
-              <Link to="/" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer">
-                Home
-              </Link>
-              <Link to="/about" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer">
-                About
-              </Link>
-              <Link to="/services" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer">
-                Services
-              </Link>
-              <Link to="/solutions" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer">
-                Solutions
-              </Link>
-              <Link to="/team" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer">
-                Team
-              </Link>
-              <Link to="/contact" className="text-gray-700 hover:text-blue-600 transition-colors cursor-pointer">
-                Contact
-              </Link>
-              <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors text-left whitespace-nowrap">
-                Get Started
-              </button>
-            </div>
+          <div className="fixed inset-0 z-50 bg-white/95 flex flex-col justify-center items-center space-y-8 transition-all duration-300">
+            <span onClick={() => scrollToSection('home')} className="text-2xl text-gray-700 hover:text-blue-600 transition-colors cursor-pointer font-semibold">Home</span>
+            <span onClick={() => scrollToSection('services')} className="text-2xl text-gray-700 hover:text-blue-600 transition-colors cursor-pointer font-semibold">Services</span>
+            <span onClick={() => scrollToSection('recentworks')} className="text-2xl text-gray-700 hover:text-blue-600 transition-colors cursor-pointer font-semibold">Recent Works</span>
+            <span onClick={() => scrollToSection('testimonials')} className="text-2xl text-gray-700 hover:text-blue-600 transition-colors cursor-pointer font-semibold">Testimonials</span>
+            <span onClick={() => scrollToSection('contact')} className="text-2xl text-gray-700 hover:text-blue-600 transition-colors cursor-pointer font-semibold">Contact</span>
+            <button className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors text-center text-xl whitespace-nowrap w-3/4" onClick={() => scrollToSection('contact')}>Get Started</button>
+            <button className="absolute top-6 right-6 text-gray-500 hover:text-blue-600 text-3xl" onClick={() => setIsMenuOpen(false)} aria-label="Close menu">&times;</button>
           </div>
         )}
       </nav>
