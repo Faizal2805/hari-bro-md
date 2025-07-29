@@ -61,7 +61,7 @@ export default function RecentWorks() {
   ];
 
   return (
-    <section className="py-20 bg-white fade-in">
+    <section id="recentworks" className="py-20 bg-white fade-in">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-16 slide-up">
