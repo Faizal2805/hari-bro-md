@@ -27,7 +27,7 @@ export default function TestimonialsSection() {
   ];
 
   return (
-    <section className="py-20 bg-white fade-in">
+    <section id="testimonials" className="py-20 bg-white fade-in">
       <div className="max-w-6xl mx-auto px-6">
         <div className="text-center mb-16 slide-up">
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
